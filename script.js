@@ -67,12 +67,16 @@
     el.style.setProperty("--p", p + "%");
   }
 
+  // Débordement volontaire : le masque arrondi coupe la photo, jamais l'inverse.
+  const COVER_BLEED = 1.06;
+
   function coverSize(iw, ih, sw, sh) {
-    if (!iw || !ih || !sw || !sh) return { w: sw, h: sh };
+    if (!iw || !ih || !sw || !sh) return { w: sw * COVER_BLEED, h: sh * COVER_BLEED };
     const imageRatio = iw / ih;
     const slotRatio = sw / sh;
-    if (imageRatio > slotRatio) return { w: sh * imageRatio, h: sh };
-    return { w: sw, h: sw / imageRatio };
+    const w = imageRatio > slotRatio ? sh * imageRatio : sw;
+    const h = imageRatio > slotRatio ? sh : sw / imageRatio;
+    return { w: w * COVER_BLEED, h: h * COVER_BLEED };
   }
 
   function roundRect(ctx, x, y, w, h, rTop, rBottom) {
@@ -116,13 +120,14 @@
 
   function calibratedFrame(width, height) {
     const scale = width / 1024;
+    // Blanc réel du cadre sur affiche.jpg (1024²), coins arrondis compris.
     return {
-      x: 228 * scale,
-      y: 378 * scale,
-      w: 304 * scale,
-      h: 456 * scale,
-      rTop: 72 * scale,
-      rBottom: 6 * scale
+      x: 226 * scale,
+      y: 376 * scale,
+      w: 308 * scale,
+      h: 464 * scale,
+      rTop: 22 * scale,
+      rBottom: 10 * scale
     };
   }
 
@@ -143,7 +148,8 @@
         const b = data[i + 2];
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
-        if (max - min < 34 && min > 220) data[i + 3] = 0;
+        const paleEdge = min > 145 && max > 230 && max - min < 120;
+        if ((max - min < 60 && min > 198) || paleEdge) data[i + 3] = 0;
       }
     }
 
@@ -156,7 +162,7 @@
         const b = data[i + 2];
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
-        if (max - min > 26 || min < 236) continue;
+        if (max - min > 70 || min < 190) continue;
         const left = x > 0 && data[(y * width + (x - 1)) * 4 + 3] === 0;
         const right = x < width - 1 && data[(y * width + (x + 1)) * 4 + 3] === 0;
         const up = y > 0 && data[((y - 1) * width + x) * 4 + 3] === 0;
