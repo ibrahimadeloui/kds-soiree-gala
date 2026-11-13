@@ -7,3 +7,5 @@ preview-*.png
 .edge-*
 dom.txt
 dom-err.txt
+_scan.cs
+_measure.ps1
