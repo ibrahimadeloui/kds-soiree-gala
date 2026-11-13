@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#140308">
+  <meta name="description" content="Crée ton badge J'y serai pour la Soirée de Gala KDS 2026 — Les Étoiles de KDS.">
+  <title>Soirée Gala KDS — J'y serai</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23140308' width='32' height='32' rx='6'/%3E%3Cpath fill='%23e8c56b' d='M16 4l2.2 6.6H25l-5.4 4 2.1 6.6L16 17.4 10.3 21.2l2.1-6.6L7 10.6h6.8z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="assets/affiche.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Great+Vibes&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("reduce");
+    }
+  </script>
+</head>
+<body>
+  <canvas id="sparks" aria-hidden="true"></canvas>
+
+  <div class="intro" id="intro">
+    <div class="curtain curtain-left" aria-hidden="true"></div>
+    <div class="curtain curtain-right" aria-hidden="true"></div>
+    <div class="intro-copy" aria-hidden="true">
+      <p class="eyebrow">Kovart Digital School présente</p>
+      <div class="title-wrap">
+        <p class="script">Soirée</p>
+        <p class="gala">Gala</p>
+      </div>
+      <p class="sub">Les Étoiles de KDS · Édition 2026</p>
+    </div>
+    <button type="button" class="skip" id="skipIntro">Passer</button>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="cap" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="currentColor" d="M24 8 4 18l20 10 16-8v10h4V18L24 8zm-10 16.2V30c0 3.2 4.5 6 10 6s10-2.8 10-6v-5.8l-10 5-10-5z"/>
+        </svg>
+        <div>
+          <strong>KDS</strong>
+          <small>Kovart Digital School</small>
+        </div>
+      </div>
+      <p class="when">Samedi 19 décembre · 20:00</p>
+    </header>
+
+    <main class="workspace">
+      <section class="stage" aria-label="Aperçu du badge">
+        <div class="poster-frame" id="posterFrame">
+          <img id="posterBase" class="poster-base" src="assets/affiche.jpg" alt="Affiche de la Soirée de Gala KDS, Les Étoiles de KDS, samedi 19 décembre à 20:00. Dress code : Traditionnel Royal.">
+          <div id="photoSlot" class="photo-slot">
+            <img id="userPhoto" alt="" draggable="false">
+            <p class="slot-hint" id="slotHint">Ton portrait<br><small>glisse pour cadrer</small></p>
+          </div>
+          <canvas id="overlayCanvas" class="poster-overlay" aria-hidden="true"></canvas>
+          <div class="glow glow-crown" id="glowCrown" aria-hidden="true"></div>
+          <div class="glow glow-banner" id="glowBanner" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <aside class="panel" id="panel">
+        <p class="kicker">Édition 2026</p>
+        <h1>J'y serai</h1>
+        <p class="lead">Les Étoiles de KDS. De la créativité à l'excellence — nos idées brillent, nos créations rayonnent.</p>
+        <ul class="chips">
+          <li>19 décembre · 20:00</li>
+          <li>Traditionnel Royal</li>
+        </ul>
+
+        <ol class="steps">
+          <li>Téléverse ta photo</li>
+          <li>Cadre ton visage</li>
+          <li>Télécharge le badge</li>
+        </ol>
+
+        <label class="btn btn-upload" id="uploadLabel">
+          <span>Téléverser ma photo</span>
+          <input id="file" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+        </label>
+        <p class="file-note" id="fileNote">JPG, PNG ou WebP</p>
+
+        <div class="control" id="zoomControl">
+          <div class="control-label">
+            <span>Zoom</span>
+            <strong id="zoomVal">100%</strong>
+          </div>
+          <div class="control-row">
+            <button type="button" id="zoomOut" aria-label="Réduire le zoom">−</button>
+            <input id="zoom" type="range" min="1" max="3" step="0.01" value="1" aria-label="Zoom" disabled>
+            <button type="button" id="zoomIn" aria-label="Augmenter le zoom">+</button>
+          </div>
+        </div>
+
+        <div class="control" id="rotControl">
+          <div class="control-label">
+            <span>Rotation</span>
+            <strong id="rotVal">0°</strong>
+          </div>
+          <div class="control-row">
+            <button type="button" id="rotLeft" aria-label="Pivoter de 90 degrés vers la gauche">↺</button>
+            <input id="rotate" type="range" min="-180" max="180" step="1" value="0" aria-label="Rotation" disabled>
+            <button type="button" id="rotRight" aria-label="Pivoter de 90 degrés vers la droite">↻</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" id="reset" disabled>Réinitialiser</button>
+          <button type="button" class="btn btn-download" id="download">Télécharger mon badge</button>
+        </div>
+        <p class="status" id="status" role="status"></p>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <p>Soirée de Gala · Kovart Digital School · Les Étoiles de KDS</p>
+    </footer>
+  </div>
+
+  <noscript>
+    <p class="noscript">Active JavaScript pour créer et télécharger ton badge.</p>
+  </noscript>
+  <script src="script.js"></script>
+</body>
+</html>

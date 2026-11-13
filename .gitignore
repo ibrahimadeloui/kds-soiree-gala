@@ -1,0 +1,9 @@
+.vercel
+.DS_Store
+node_modules
+assets/_map.txt
+server.js
+preview-*.png
+.edge-*
+dom.txt
+dom-err.txt
