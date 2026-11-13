@@ -452,17 +452,6 @@
     ctx.drawImage(userPhoto, -base.w / 2, -base.h / 2, base.w, base.h);
     ctx.restore();
     ctx.drawImage(overlayCanvas, 0, 0, out.width, out.height);
-    const credit = "Design by Ibrahim adeloui";
-    const fontSize = Math.max(16, Math.round(out.width * 0.018));
-    ctx.save();
-    ctx.font = "500 " + fontSize + "px Outfit, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "bottom";
-    ctx.fillStyle = "rgba(232, 197, 107, 0.92)";
-    ctx.shadowColor = "rgba(18, 2, 6, 0.8)";
-    ctx.shadowBlur = fontSize * 0.45;
-    ctx.fillText(credit, out.width / 2, out.height - fontSize * 0.55);
-    ctx.restore();
     return out;
   }
 
